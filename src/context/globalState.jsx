@@ -7,6 +7,11 @@ const themeState = atom({
     default: localStorage.getItem("themeLocal") || 'dark',
 })
 
+const tempMarkerState = atom({
+    key: 'tempMarker',
+    default: false,
+})
+
 const markerFilterState = atom({
     key: 'markerFilter',
     default: '',
@@ -23,8 +28,9 @@ export const useGlobalState = () => {
     const [theme, setTheme] = useRecoilState(themeState)
     const [latLng, setLatLng] = useRecoilState(latLngState)
     const [markerFilter, setMarkerFilter] = useRecoilState(markerFilterState)
+    const [tempMarker, setTempMarker] = useRecoilState(tempMarkerState)
 
-    return { theme, setTheme, latLng, setLatLng, markerFilter, setMarkerFilter }
+    return { theme, setTheme, latLng, setLatLng, markerFilter, setMarkerFilter, tempMarker, setTempMarker }
 }
 
 // Hook for using React Query
