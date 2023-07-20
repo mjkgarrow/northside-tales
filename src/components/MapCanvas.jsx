@@ -1,16 +1,19 @@
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, Popup, Marker, useMapEvents } from 'react-leaflet'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useGlobalState, useReactQueries } from '../context/globalState'
 import { DarkCleanMap, LightCleanMap, mapCanvasProps, customIcon, createCustomClusterIcon } from './MapAssets'
 import LoadingIcon from './LoadingIcon'
 
 export default function MapCanvas() {
     // Access global state
-    const { theme, setLatLng, markerFilter } = useGlobalState()
+    const { theme, setLatLng, markerFilter, tempMarker, setTempMarker } = useGlobalState()
 
     // Access backend data through React Query
     const { markerQuery } = useReactQueries()
+
+    // Manage popup state
+    const [popupOpen, setPopupOpen] = useState(false)
 
     // Refresh map on theme change
     useEffect(() => {
@@ -19,16 +22,31 @@ export default function MapCanvas() {
 
     // Handle map events
     function MapEventHandler() {
-        useMapEvents({
+        const map = useMapEvents({
             // On click, open modal
             click: (event) => {
-                // console.log(event.latlng)
 
                 // Set latLng data to global context
                 setLatLng(event.latlng)
 
-                // Open form modal
-                window.meeting_modal_create.showModal()
+                // Manage popup closing on map click
+                if (popupOpen) {
+                    setPopupOpen(false)
+
+                    // Open form on clean map click
+                } else {
+                    // Create a temporary marker
+                    setTempMarker(event.latlng)
+
+                    // Fly map to clicked location
+                    map.flyTo({
+                        lat: event.latlng.lat - 0.002,
+                        lng: event.latlng.lng
+                    }, 17)
+
+                    // Open form modal
+                    window.meeting_modal_create.showModal()
+                }
             },
         })
     }
@@ -78,7 +96,7 @@ export default function MapCanvas() {
             <MapContainer
                 center={mapCanvasProps.center}
                 zoom={mapCanvasProps.zoom}
-                className='h-full w-11/12 rounded-xl antialiased shadow-2xl shadow-gray-600'>
+                className='h-full w-11/12 rounded-xl antialiased shadow-2xl shadow-gray-600 cursor-pointer'>
 
                 {/* Change map based on theme */}
                 {theme === 'dark' ? DarkCleanMap : LightCleanMap}
@@ -86,10 +104,17 @@ export default function MapCanvas() {
                 {/* Handle events in map */}
                 <MapEventHandler />
 
+                {/* Show temp marker when user clicks on map */}
+                {tempMarker && <Marker position={tempMarker} icon={customIcon("")} />}
 
                 {/* Display markers */}
                 {markerQuery.data && filteredMarkers().map((mark, index) => (
-                    <Marker key={index} position={mark.latLng} icon={customIcon(mark.type)}>
+                    <Marker key={index} position={mark.latLng} icon={customIcon(mark.type)}
+                        eventHandlers={{
+                            click: (e) => {
+                                setPopupOpen(!popupOpen)
+                            }
+                        }}>
                         <Popup>
                             <div className='font-bold text-sm bg-base-200 px-4 py-2 rounded-lg text-left min-w-[130px] flex flex-col'>
                                 <p className='text-secondary italic'>{mark.name}</p>
