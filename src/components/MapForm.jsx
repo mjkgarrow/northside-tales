@@ -56,44 +56,35 @@ export default function MapForm({ latLng }) {
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 method='dialog'
-                className='modal-box rounded-lg w-64'>
-                <div className='space-y-4'>
+                className='modal-box rounded-lg w-60 sm:w-72'>
+                <div className='flex flex-col gap-3 sm:gap-4'>
+                    {/* Name input */}
                     <input
                         {...register('name', {
                             required: 'Name required',
                         })}
                         defaultValue=''
                         type='text'
-                        className='input input-bordered w-full'
+                        className='input input-bordered input-sm sm:input-md w-full'
                         placeholder='Your name'
                     />
-                    {errors.name && (
-                        <div className='alert alert-error rounded-md'>
-                            {errors.name.message}
-                        </div>
-                    )}
 
+                    {/* Message input */}
                     <textarea
                         {...register('message', {
                             required: 'Message required',
                         })}
                         id="formTextArea"
-                        className="textarea textarea-bordered w-full"
+                        className="textarea textarea-bordered textarea-sm sm:textarea-md w-full pb-0"
                         placeholder="Message"
-                        rows="3"
                     />
 
-                    {errors.message && (
-                        <div className='alert alert-error rounded-md'>
-                            {errors.message.message}
-                        </div>
-                    )}
-
+                    {/* Type select */}
                     <select
                         {...register('type', {
                             required: 'Type required',
                         })}
-                        className='input input-bordered w-full'
+                        className='select select-bordered select-sm sm:select-md w-full'
                         required
                         defaultValue="">
 
@@ -103,20 +94,10 @@ export default function MapForm({ latLng }) {
                         <option value="Goss">Goss</option>
                         <option value="Random">Random</option>
                     </select>
-
-                    {errors.type && (
-                        <div className='alert alert-error rounded-md'>
-                            {errors.type.message}
-                        </div>
-                    )}
-
-                    {errors?.backendErrors && errors.backendErrors.message.map((error, index) => {
-                        return <div key={index} className='alert alert-error rounded-md'>{error}</div>
-                    })}
                 </div>
 
-                <div className='modal-action'>
-                    <button className='btn btn-accent w-full normal-case'>
+                <div className='modal-action mt-3 sm:mt-4'>
+                    <button className='btn btn-accent btn-sm sm:btn-md w-full normal-case'>
                         Add message!
                     </button>
                 </div>
