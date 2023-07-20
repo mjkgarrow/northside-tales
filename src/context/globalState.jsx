@@ -4,7 +4,7 @@ import { getMarkers, getMarker, postMarker, updateMarker, deleteMarker } from '.
 
 const themeState = atom({
     key: 'theme',
-    default: localStorage.getItem("themeLocal") || 'light',
+    default: localStorage.getItem("themeLocal") || 'dark',
 })
 
 const markerFilterState = atom({
@@ -14,7 +14,7 @@ const markerFilterState = atom({
 
 const latLngState = atom({
     key: 'latLng',
-    default: localStorage.getItem("themeLocal") || 'light',
+    default: {},
 })
 
 // Hook for using Recoil global state
