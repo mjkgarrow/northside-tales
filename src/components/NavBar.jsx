@@ -56,6 +56,16 @@ export default function NavBar() {
                         placeholder="Search"
                         className="input input-bordered w-28" />
                 </div>
+                <button className="btn rounded-full" onClick={() => window.my_modal_2.showModal()}>info</button>
+                <dialog id="my_modal_2" className="modal">
+                    <form method="dialog" className="modal-box w-56 text-center p-4">
+                        <h3 className="font-bold text-xl text-secondary">Hello!</h3>
+                        <p className="py-2 font-medium">Click on the map to place a marker and leave a message for everyone to see!</p>
+                    </form>
+                    <form method="dialog" className="modal-backdrop">
+                        <button>close</button>
+                    </form>
+                </dialog>
                 <ThemeChanger />
             </div>
         </header>
