@@ -30,13 +30,13 @@ export default function NavBar() {
 
 
     return (
-        <header className="navbar bg-base-100 p-4">
-            <div className="flex-1">
-                <a className="btn btn-ghost normal-case text-xl">Northside tales</a>
+        <header className="navbar bg-base-100 p-4 flex-col sm:flex-row">
+            <div className="flex-1 min-w-fit pb-3 pl-5 sm:pb-0">
+                <a className="normal-case text-xl font-bold">Northside tales</a>
             </div>
             <div className="flex-none gap-2">
                 <div className="dropdown z-[9999]">
-                    <label tabIndex={0} className="btn m-1" onClick={handleClick}>Show message types</label>
+                    <label tabIndex={0} className="btn m-1" onClick={handleClick}>Message type</label>
                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                         <li><button onClick={changeFilter} value="">All markers</button></li>
                         <li><button onClick={changeFilter} value="vibe">Vibes</button></li>
@@ -54,7 +54,7 @@ export default function NavBar() {
                         onChange={changeFilter}
                         type="text"
                         placeholder="Search"
-                        className="input input-bordered w-24 md:w-auto" />
+                        className="input input-bordered" />
                 </div>
                 <ThemeChanger />
             </div>

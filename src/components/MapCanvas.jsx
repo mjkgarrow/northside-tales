@@ -91,7 +91,7 @@ export default function MapCanvas() {
                 {markerQuery.data && filteredMarkers().map((mark, index) => (
                     <Marker key={index} position={mark.latLng} icon={customIcon(mark.type)}>
                         <Popup>
-                            <div className='font-bold text-sm bg-base-300 px-4 py-2 rounded-lg text-left min-w-[130px] flex flex-col'>
+                            <div className='font-bold text-sm bg-base-200 px-4 py-2 rounded-lg text-left min-w-[130px] flex flex-col'>
                                 <p className='text-secondary italic'>{mark.name}</p>
                                 <p className='py-2'>{mark.message}</p>
                                 <p className={getTypeClassString(mark.type)}>{mark.type}</p>
