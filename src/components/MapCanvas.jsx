@@ -1,11 +1,16 @@
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, Popup, Marker, useMapEvents } from 'react-leaflet'
 import { useEffect } from 'react'
-import { useGlobalState } from '../context/globalState'
+import { useGlobalState, useReactQueries } from '../context/globalState'
 import { DarkCleanMap, LightCleanMap, mapCanvasProps, customIcon, createCustomClusterIcon } from './MapAssets'
+import LoadingIcon from './LoadingIcon'
 
 export default function MapCanvas() {
-    const { theme, markers, setLatLng, markerFilter } = useGlobalState()
+    // Access global state
+    const { theme, setLatLng, markerFilter } = useGlobalState()
+
+    // Access backend data through React Query
+    const { markerQuery } = useReactQueries()
 
     // Refresh map on theme change
     useEffect(() => {
@@ -28,8 +33,9 @@ export default function MapCanvas() {
         })
     }
 
+    // Function to filter the markers
     const filteredMarkers = () => {
-        return markers.filter((mark) => {
+        return markerQuery.data.filter((mark) => {
             // Check if the search term exists in any of the properties
             for (const prop in mark) {
                 if (typeof mark[prop] === 'string' && mark[prop].toLowerCase().includes(markerFilter.toLowerCase())) {
@@ -42,12 +48,37 @@ export default function MapCanvas() {
         })
     }
 
+    const getTypeClassString = (type) => {
+        let str
+        switch (type) {
+            case "Vibe":
+                str = "italic text-purple-500"
+                break;
+            case "Ships passing":
+                str = "italic text-red-500"
+                break;
+            case "Goss":
+                str = "italic text-green-500"
+                break;
+            case "Random":
+                str = "italic text-blue-500"
+                break;
+            default:
+                str = "italic text-white"
+                break;
+        }
+        return str
+    }
+
+    // Show loading animation while data loads
+    if (markerQuery.isLoading) return <LoadingIcon />
+
     return (
         <div className='w-full h-full flex justify-center items-center'>
             <MapContainer
                 center={mapCanvasProps.center}
                 zoom={mapCanvasProps.zoom}
-                className='h-[80%] w-11/12 rounded-xl antialiased border-4 border-base-300 shadow-2xl shadow-gray-600'>
+                className='h-[80%] w-11/12 rounded-xl antialiased shadow-2xl shadow-gray-600'>
 
                 {/* Change map based on theme */}
                 {theme === 'dark' ? DarkCleanMap : LightCleanMap}
@@ -57,26 +88,17 @@ export default function MapCanvas() {
 
 
                 {/* Display markers */}
-                {markers && filteredMarkers().map((mark, index) => (
-                    <Marker key={index} position={mark.latLng} icon={customIcon}>
+                {markerQuery.data && filteredMarkers().map((mark, index) => (
+                    <Marker key={index} position={mark.latLng} icon={customIcon(mark.type)}>
                         <Popup>
-                            <p>Name: {mark.name}</p>
-                            <p>Message: {mark.message}</p>
-                            <p>Type: {mark.type}</p>
+                            <div className='font-bold text-sm bg-base-300 px-4 py-2 rounded-lg text-left min-w-[130px] flex flex-col'>
+                                <p className='text-secondary italic'>{mark.name}</p>
+                                <p className='py-2'>{mark.message}</p>
+                                <p className={getTypeClassString(mark.type)}>{mark.type}</p>
+                            </div>
                         </Popup>
                     </Marker>
                 ))}
-
-                {/* Display markers */}
-                {/* {markers && markers.map((mark, index) => (
-                    <Marker key={index} position={mark.latLng} icon={customIcon}>
-                        <Popup>
-                            <p>Name: {mark.name}</p>
-                            <p>Message: {mark.message}</p>
-                            <p>Type: {mark.type}</p>
-                        </Popup>
-                    </Marker>
-                ))} */}
 
             </MapContainer>
         </div>
