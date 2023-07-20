@@ -1,6 +1,5 @@
 import { TileLayer } from 'react-leaflet'
-import { Icon, divIcon } from 'leaflet';
-import pinIcon from '../img/pin2.png'
+import { divIcon } from 'leaflet';
 
 export const Pioner = <TileLayer
     attribution='&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
