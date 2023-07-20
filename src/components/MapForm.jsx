@@ -54,7 +54,7 @@ export default function MapForm({ latLng }) {
     return (
         <dialog id='meeting_modal_create' className='modal'>
             <form
-                autocomplete='off'
+                autoComplete='off'
                 onSubmit={handleSubmit(onSubmit)}
                 method='dialog'
                 className='modal-box rounded-lg w-60 sm:w-72'>
@@ -69,7 +69,7 @@ export default function MapForm({ latLng }) {
                         className='input input-bordered input-sm sm:input-md w-full'
                         placeholder='Your name'
                         data-form-type="other"
-                        autocomplete='off'
+                        autoComplete='off'
                     />
 
                     {/* Message input */}
@@ -81,7 +81,7 @@ export default function MapForm({ latLng }) {
                         className="textarea textarea-bordered textarea-sm sm:textarea-md w-full pb-0"
                         placeholder="Message"
                         data-form-type="other"
-                        autocomplete='off'
+                        autoComplete='off'
                     />
 
                     {/* Type select */}
@@ -93,7 +93,7 @@ export default function MapForm({ latLng }) {
                         required
                         defaultValue=""
                         data-form-type="other"
-                        autocomplete='off'>
+                        autoComplete='off'>
 
                         <option value="" disabled>Message type</option>
                         <option value="Vibe">Vibe</option>
