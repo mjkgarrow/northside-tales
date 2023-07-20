@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form"
-import { useGlobalState } from '../context/globalState'
+import { useReactQueries } from '../context/globalState'
 
 export default function MapForm({ latLng }) {
-    const { markers, setMarkers } = useGlobalState()
+    const { createMarker } = useReactQueries()
 
     // Form management
     const {
@@ -20,7 +20,7 @@ export default function MapForm({ latLng }) {
         data.latLng = latLng
 
         // Add marker to global state
-        setMarkers((prev) => [...prev, data])
+        createMarker.mutate(data)
 
         // Reset form values
         reset()
@@ -88,11 +88,12 @@ export default function MapForm({ latLng }) {
                         defaultValue="">
 
                         <option value="" disabled>Message type</option>
-                        <option value="vibe">Vibe</option>
-                        <option value="ships">Ships passing</option>
-                        <option value="gossip">Goss</option>
-                        <option value="random">Random</option>
+                        <option value="Vibe">Vibe</option>
+                        <option value="Ships passing">Ships passing</option>
+                        <option value="Goss">Goss</option>
+                        <option value="Random">Random</option>
                     </select>
+
                     {errors.type && (
                         <div className='alert alert-error rounded-md'>
                             {errors.type.message}
