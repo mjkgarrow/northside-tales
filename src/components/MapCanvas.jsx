@@ -78,7 +78,7 @@ export default function MapCanvas() {
             <MapContainer
                 center={mapCanvasProps.center}
                 zoom={mapCanvasProps.zoom}
-                className='h-[80%] w-11/12 rounded-xl antialiased shadow-2xl shadow-gray-600'>
+                className='h-full w-11/12 rounded-xl antialiased shadow-2xl shadow-gray-600'>
 
                 {/* Change map based on theme */}
                 {theme === 'dark' ? DarkCleanMap : LightCleanMap}
