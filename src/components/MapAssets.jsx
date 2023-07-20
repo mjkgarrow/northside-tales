@@ -66,7 +66,7 @@ export const customIcon = (type) => {
     return new divIcon({
         className: '',
         html: icon,
-        iconAnchor: [16, 32],
+        iconAnchor: [12, 25],
         popupAnchor: [-4, -32]
     })
 }
