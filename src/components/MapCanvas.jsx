@@ -88,9 +88,6 @@ export default function MapCanvas() {
         return str
     }
 
-    // Show loading animation while data loads
-    if (markerQuery.isLoading) return <LoadingIcon />
-
     return (
         <div className='w-full h-full flex justify-center items-center'>
             <MapContainer
