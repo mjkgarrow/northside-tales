@@ -1,8 +1,12 @@
 import { useForm } from "react-hook-form"
-import { useReactQueries } from '../context/globalState'
+import { useGlobalState, useReactQueries } from '../context/globalState'
 
 export default function MapForm({ latLng }) {
+    // Create marker query
     const { createMarker } = useReactQueries()
+
+    // Access global temp marker setter
+    const { setTempMarker } = useGlobalState()
 
     // Form management
     const {
@@ -28,6 +32,9 @@ export default function MapForm({ latLng }) {
         // Close modal
         window.meeting_modal_create.close()
 
+        // Clear temporary marker
+        setTempMarker(false)
+
         // Reset textarea height after 200 milliseconds so it doesn't look janky
         setTimeout(function () { document.getElementById("formTextArea").style.height = "102px" }, 200)
     }
@@ -36,6 +43,9 @@ export default function MapForm({ latLng }) {
     const clearModal = () => {
         // Reset form values
         reset()
+
+        // Clear temporary marker
+        setTempMarker(false)
 
         // Reset textarea height after 200 milliseconds so it doesn't look janky
         setTimeout(function () { document.getElementById("formTextArea").style.height = "102px" }, 200)
@@ -106,7 +116,6 @@ export default function MapForm({ latLng }) {
                 </div>
 
                 <div className='modal-action'>
-                    {/* if there is a button in form, it will close the modal */}
                     <button className='btn btn-accent w-full normal-case'>
                         Add message!
                     </button>
