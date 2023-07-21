@@ -19,7 +19,7 @@ export default function NavBar() {
             switch (event.target.value) {
                 case 'vibe':
                     button.classList.value = 'btn btn-accent sm:btn-md'
-                    title = 'vibe'
+                    title = 'vibes'
                     break;
                 case 'goss':
                     button.classList.value = 'btn btn-success sm:btn-md'
