@@ -3,7 +3,7 @@ import { MapContainer, Popup, Marker, useMapEvents } from 'react-leaflet'
 import { useEffect, useState } from 'react'
 import { useGlobalState, useReactQueries } from '../context/globalState'
 import { DarkCleanMap, LightCleanMap, mapCanvasProps, customIcon, createCustomClusterIcon } from './MapAssets'
-import LoadingIcon from './LoadingIcon'
+import { convertToNaturalLanguage, convertDateInput, cleanDateString } from '../utils/helpers'
 
 export default function MapCanvas() {
     // Access global state
@@ -56,7 +56,9 @@ export default function MapCanvas() {
         return markerQuery.data.filter((mark) => {
             // Check if the search term exists in any of the properties
             for (const prop in mark) {
-                if (typeof mark[prop] === 'string' && mark[prop].toLowerCase().includes(markerFilter.toLowerCase())) {
+                if (['message', 'name', 'type'].includes(prop)
+                    && typeof mark[prop] === 'string'
+                    && mark[prop].toLowerCase().includes(markerFilter.toLowerCase())) {
                     return true;
                 }
             }
@@ -70,19 +72,22 @@ export default function MapCanvas() {
         let str
         switch (type) {
             case "Vibe":
-                str = "italic text-purple-500"
+                str = "italic text-xs text-purple-500"
                 break;
             case "Ships passing":
-                str = "italic text-red-500"
+                str = "italic text-xs text-red-500"
                 break;
             case "Goss":
-                str = "italic text-green-500"
+                str = "italic text-xs text-green-500"
                 break;
             case "Random":
-                str = "italic text-blue-500"
+                str = "italic text-xs text-blue-500"
+                break;
+            case "Deeds":
+                str = "italic text-xs text-orange-500"
                 break;
             default:
-                str = "italic text-white"
+                str = "italic text-xs text-white"
                 break;
         }
         return str
@@ -114,10 +119,15 @@ export default function MapCanvas() {
                         }}>
                         <Popup
                             closeButton={false}>
-                            <div className='font-bold text-sm bg-base-200 px-4 py-2 rounded-lg text-left min-w-[130px] flex flex-col'>
-                                <p className='text-secondary italic'>{mark.name}</p>
-                                <p className='py-2'>{mark.message}</p>
-                                <p className={getTypeClassString(mark.type)}>{mark.type}</p>
+                            <div className='font-bold bg-base-100 rounded-lg text-left w-max flex flex-col'>
+                                <div className='bg-base-200 w-full rounded-t-lg p-2'>
+                                    <p className='text-accent italic text-xs'><span className={getTypeClassString(mark.type)}>{mark.type}</span> - {convertToNaturalLanguage(mark.createdAt)}</p>
+                                </div>
+                                <div className='w-full p-2 py-3 text-sm'>
+                                    <p className='text-error italic'>{mark.name}:</p>
+                                    <p className='p-2 max-w-xs'>{mark.message}</p>
+                                </div>
+
                             </div>
                         </Popup>
                     </Marker>
