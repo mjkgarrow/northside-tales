@@ -18,31 +18,31 @@ export default function NavBar() {
             // Add an 's' to vibe
             switch (event.target.value) {
                 case 'vibe':
-                    button.classList.value = 'btn btn-secondary sm:btn-md'
+                    button.classList.value = 'btn btn-sm btn-secondary sm:btn-md'
                     title = 'vibes'
                     break;
                 case 'goss':
-                    button.classList.value = 'btn btn-success sm:btn-md'
+                    button.classList.value = 'btn btn-sm btn-success sm:btn-md'
                     title = 'goss'
                     break;
 
                 case 'deeds':
-                    button.classList.value = 'btn btn-warning sm:btn-md'
+                    button.classList.value = 'btn btn-sm btn-warning sm:btn-md'
                     title = 'deeds'
                     break;
 
                 case 'ships':
-                    button.classList.value = 'btn btn-error sm:btn-md'
+                    button.classList.value = 'btn btn-sm btn-error sm:btn-md'
                     title = 'ships'
                     break;
 
                 case 'random':
-                    button.classList.value = 'btn btn-info sm:btn-md'
+                    button.classList.value = 'btn btn-sm btn-info sm:btn-md'
                     title = 'random'
                     break;
 
                 default:
-                    button.classList.value = 'btn sm:btn-md'
+                    button.classList.value = 'btn btn-sm sm:btn-md'
                     title = 'markers'
                     break;
             }
