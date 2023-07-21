@@ -16,5 +16,5 @@
 }
 
 .leaflet-popup-tip {
-    background-color: hsl(var(--b2));
+    background-color: hsl(var(--b1));
 }

@@ -72,19 +72,19 @@ export default function MapCanvas() {
         let str
         switch (type) {
             case "Vibe":
-                str = "italic text-xs text-purple-500"
+                str = "italic text-xs text-secondary"
                 break;
-            case "Ships passing":
-                str = "italic text-xs text-red-500"
+            case "Ships":
+                str = "italic text-xs text-error"
                 break;
             case "Goss":
-                str = "italic text-xs text-green-500"
+                str = "italic text-xs text-success"
                 break;
             case "Random":
-                str = "italic text-xs text-blue-500"
+                str = "italic text-xs text-info"
                 break;
             case "Deeds":
-                str = "italic text-xs text-orange-500"
+                str = "italic text-xs text-warning"
                 break;
             default:
                 str = "italic text-xs text-white"
@@ -121,11 +121,12 @@ export default function MapCanvas() {
                             closeButton={false}>
                             <div className='font-bold bg-base-100 rounded-lg text-left w-max flex flex-col'>
                                 <div className='bg-base-200 w-full rounded-t-lg p-2'>
-                                    <p className='text-accent italic text-xs'><span className={getTypeClassString(mark.type)}>{mark.type}</span> - {convertToNaturalLanguage(mark.createdAt)}</p>
+                                    <span className={getTypeClassString(mark.type)}>{mark.type}</span>
+                                    <span className='italic text-xs'> - {convertToNaturalLanguage(mark.createdAt)}</span>
                                 </div>
-                                <div className='w-full p-2 py-3 text-sm'>
-                                    <p className='text-error italic'>{mark.name}:</p>
-                                    <p className='p-2 max-w-xs'>{mark.message}</p>
+                                <div className='w-full p-2 py-3 text-[1rem]'>
+                                    <p className='text-violet-400 italic pl-2'>{mark.name}:</p>
+                                    <p className='py-3 px-5 max-w-xs font-extrabold'>{mark.message}</p>
                                 </div>
 
                             </div>
