@@ -97,8 +97,9 @@ export default function MapForm({ latLng }) {
 
                         <option value="" disabled>Message type</option>
                         <option value="Vibe">Vibe</option>
-                        <option value="Ships passing">Ships passing</option>
                         <option value="Goss">Goss</option>
+                        <option value="Deeds">Deeds</option>
+                        <option value="Ships">Ships</option>
                         <option value="Random">Random</option>
                     </select>
                 </div>
