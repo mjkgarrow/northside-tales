@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 import ThemeChanger from './ThemeChanger'
 import { useGlobalState } from '../context/globalState'
 
@@ -18,7 +18,7 @@ export default function NavBar() {
             // Add an 's' to vibe
             switch (event.target.value) {
                 case 'vibe':
-                    button.classList.value = 'btn btn-accent sm:btn-md'
+                    button.classList.value = 'btn btn-secondary sm:btn-md'
                     title = 'vibes'
                     break;
                 case 'goss':
@@ -116,7 +116,7 @@ export default function NavBar() {
                 {/* Info modal */}
                 <dialog id="my_modal_2" className="modal">
                     <form method="dialog" className="modal-box w-fit text-center p-4">
-                        <h3 className="font-bold text-lg text-secondary">Hi, welcome to Northside Tales!</h3>
+                        <h3 className="font-bold text-lg text-violet-500">Hi, welcome to Northside Tales!</h3>
                         <div className='absolute right-16 top-12'>
                             <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M12 10c-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2m0-5c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3m-7 2.602c0-3.517 3.271-6.602 7-6.602s7 3.085 7 6.602c0 3.455-2.563 7.543-7 14.527-4.489-7.073-7-11.072-7-14.527m7-7.602c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602" className="fill-white scale-75" /></svg>
                         </div>
@@ -124,11 +124,11 @@ export default function NavBar() {
                             <br></br>
                             and leave a message for everyone to see.</p>
                         <p className="py-2 font-medium text-left text-base">The types of messages:</p>
-                        <p className="py-2 font-medium text-left text-purple-500 text-sm">Vibe - party out back 🥳</p>
-                        <p className="py-2 font-medium text-left text-green-500 text-sm">Goss - spill it 🙊</p>
-                        <p className="py-2 font-medium text-left text-red-500 text-sm">Ships - bump into a cutie ❤️</p>
-                        <p className="py-2 font-medium text-left text-blue-500 text-sm">Random - wacky tales 🤪</p>
-                        <p className="py-2 font-medium text-left text-orange-500 text-sm">Deeds - a good deed to help the community 😇</p>
+                        <p className="py-2 font-medium text-left text-secondary text-sm">Vibe - party out back 🥳</p>
+                        <p className="py-2 font-medium text-left text-success text-sm">Goss - spill it 🙊</p>
+                        <p className="py-2 font-medium text-left text-error text-sm">Ships - bump into a cutie ❤️</p>
+                        <p className="py-2 font-medium text-left text-info text-sm">Random - wacky tales 🤪</p>
+                        <p className="py-2 font-medium text-left text-warning text-sm">Deeds - a good deed to help the community 😇</p>
                     </form>
                     <form method="dialog" className="modal-backdrop">
                         <button>close</button>
