@@ -13,8 +13,7 @@ export default {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: true, // true: all themes | false: only light + dark | array: specific themes like this ["light", "dark", "cupcake"]
-    // themes: ["light", "corporate", "dark", "dracula"], // specify list to include only these themes
+    themes: false, // only dark and light
     darkTheme: "dark", // name of one of the included themes used for dark mode
     logs: false // turn off console info
   },
