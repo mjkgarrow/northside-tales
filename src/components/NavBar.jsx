@@ -84,10 +84,12 @@ export default function NavBar() {
     }, [])
 
     return (
-        <header className="navbar bg-base-100 p-2 sm:p-5 flex-col sm:flex-row">
-            <div className="flex-1 min-w-fit sm:pl-4">
+        <header className="navbar bg-base-100 px-0 py-3 sm:py-5 flex-col sm:flex-row w-11/12 self-center">
+            {/* App title */}
+            <div className="flex-1 min-w-fit">
                 <a className="normal-case text-2xl font-bold">Northside tales</a>
             </div>
+
             <div className="flex-none gap-2 py-0 z-[9999]">
                 {/* Marker drop down */}
                 <div className="dropdown">
