@@ -1,7 +1,4 @@
-
-
 import { MapContainer, Popup, Marker } from 'react-leaflet'
-import L from "leaflet";
 import { useEffect, useState } from 'react'
 import { useGlobalState, useReactQueries } from '../context/globalState'
 import { DarkCleanMap, LightCleanMap, mapCanvasProps, customIcon, Watercolour } from './MapAssets'
