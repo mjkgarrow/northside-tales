@@ -1,9 +1,16 @@
-import 'leaflet/dist/leaflet.css'
-import { MapContainer, Popup, Marker, useMapEvents } from 'react-leaflet'
+
+
+import { MapContainer, Popup, Marker, useMapEvents, useMap } from 'react-leaflet'
+import L from "leaflet";
 import { useEffect, useState } from 'react'
 import { useGlobalState, useReactQueries } from '../context/globalState'
 import { DarkCleanMap, LightCleanMap, mapCanvasProps, customIcon, createCustomClusterIcon } from './MapAssets'
 import { convertToNaturalLanguage, convertDateInput, cleanDateString } from '../utils/helpers'
+
+import 'leaflet/dist/leaflet.css'
+import "leaflet-easybutton/src/easy-button.js";
+import "leaflet-easybutton/src/easy-button.css";
+import "font-awesome/css/font-awesome.min.css";
 
 export default function MapCanvas() {
     // Access global state
@@ -15,41 +22,96 @@ export default function MapCanvas() {
     // Manage popup state
     const [popupOpen, setPopupOpen] = useState(false)
 
+    // Access map instance
+    const [map, setMap] = useState(null)
+
+    // Manage user geolocation
+    const [userLoc, setUserLoc] = useState(null)
+
     // Refresh map on theme change
     useEffect(() => {
 
     }, [theme])
 
-    // Handle map events
-    function MapEventHandler() {
-        const map = useMapEvents({
-            // On click, open modal
-            click: (event) => {
+    // Get user's position on component load
+    useEffect(() => {
+        if (navigator.geolocation) {
 
-                // Set latLng data to global context
-                setLatLng(event.latlng)
+            navigator.geolocation.getCurrentPosition((position) => {
 
-                // Manage popup closing on map click
-                if (popupOpen) {
-                    setPopupOpen(false)
+                setUserLoc({ lat: position.coords.latitude, lng: position.coords.longitude })
 
-                    // Open form on clean map click
-                } else {
-                    // Create a temporary marker
-                    setTempMarker(event.latlng)
+            }, () => {
+                console.log("Unable to retrieve your location")
+            });
+        } else {
+            console.log("Geolocation not supported")
+        }
 
-                    // Fly map to clicked location
-                    map.flyTo({
-                        lat: event.latlng.lat - 0.002,
-                        lng: event.latlng.lng
-                    }, 17)
+    }, [])
 
-                    // Open form modal
-                    window.meeting_modal_create.showModal()
-                }
-            },
+    // Track changes to the map, like map start and map update
+    useEffect(() => {
+        // Confirm the map is loaded
+        if (!map) return;
+
+        // When map is clicked, close open popups or open modal
+        map.on("click", (event) => {
+
+            // Set latLng data to global context
+            setLatLng(event.latlng)
+
+            // Manage popup closing on map click
+            if (popupOpen) {
+                setPopupOpen(false)
+
+                // Open form on clean map click
+            } else {
+                // Create a temporary marker
+                setTempMarker(event.latlng)
+
+                // Fly map to clicked location
+                map.flyTo({
+                    lat: event.latlng.lat - 0.001,
+                    lng: event.latlng.lng
+                }, 18)
+
+                // Open form modal
+                window.marker_form_modal.showModal()
+            }
         })
-    }
+
+        // Check geolocation is supported
+        if (navigator.geolocation) {
+            // // While app is searching for user location, show spinning icon using leaflet-easy-button
+            const loadingLoc = L.easyButton('<div class="flex justify-center items-center pt-[7px]"><span class="loading loading-spinner loading-xs"></span></div>', () => {
+
+            }).addTo(map);
+
+            // Find users location
+            navigator.geolocation.getCurrentPosition(() => {
+
+                // If user location found remove spinning icon
+                loadingLoc.remove(map)
+
+                // Add show-location button
+                L.easyButton("fa-location-arrow", () => {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        map.flyTo({ lat: position.coords.latitude, lng: position.coords.longitude }, 18, { animation: false });
+                    }, () => {
+                        console.log("Unable to retrieve your location")
+                    }, {
+                        enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity
+                    })
+                }).addTo(map)
+
+            }, () => { // Error function to call if location services disabled
+                loadingLoc.remove(map)
+            }, {
+                enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity
+            })
+        }
+    }, [map]);
 
     // Function to filter the markers
     const filteredMarkers = () => {
@@ -96,18 +158,19 @@ export default function MapCanvas() {
     return (
         <div className='w-full h-full flex justify-center items-center'>
             <MapContainer
-                center={mapCanvasProps.center}
+                center={userLoc || mapCanvasProps.center}
                 zoom={mapCanvasProps.zoom}
-                className='h-full w-11/12 rounded-xl antialiased shadow-2xl shadow-gray-600 cursor-pointer'>
+                ref={setMap}
+                className='h-full w-11/12 rounded-xl antialiased shadow-2xl shadow-gray-600 cursor-pointer focus-visible:'>
 
                 {/* Change map based on theme */}
                 {theme === 'dark' ? DarkCleanMap : LightCleanMap}
 
-                {/* Handle events in map */}
-                <MapEventHandler />
-
                 {/* Show temp marker when user clicks on map */}
                 {tempMarker && <Marker position={tempMarker} icon={customIcon("")} />}
+
+                {/* Show user location */}
+                {userLoc && <Marker position={userLoc} icon={customIcon("user")} />}
 
                 {/* Display markers */}
                 {markerQuery.data && filteredMarkers().map((mark, index) => (
@@ -139,3 +202,4 @@ export default function MapCanvas() {
 
     )
 }
+
