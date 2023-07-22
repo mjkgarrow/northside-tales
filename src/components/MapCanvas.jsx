@@ -105,65 +105,36 @@ export default function MapCanvas() {
             }]
         }).addTo(map);
 
-        // // Check geolocation is supported
-        // if (navigator.geolocation) {
-        //     // // While app is searching for user location, show spinning icon using leaflet-easy-button
-        //     const loadingLoc = L.easyButton('<div class="flex justify-center items-center pt-[7px]"><span class="loading loading-spinner loading-xs"></span></div>', () => {
+        L.easyButton({
+            states: [{
+                stateName: 'locate',
+                icon: '<div class="h-full flex justify-center items-center"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M429.6 92.1c4.9-11.9 2.1-25.6-7-34.7s-22.8-11.9-34.7-7l-352 144c-14.2 5.8-22.2 20.8-19.3 35.8s16.1 25.8 31.4 25.8H224V432c0 15.3 10.8 28.4 25.8 31.4s30-5.1 35.8-19.3l144-352z"/></svg></div>',
+                title: 'Locate me',
+                onClick: (btn) => {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        map.flyTo({ lat: position.coords.latitude, lng: position.coords.longitude }, map.getMaxZoom() > 17 ? 18 : 17, { animation: false });
+                    }, () => {
+                        btn.state('disabled')
+                    }, {
+                        enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity
+                    })
+                }
+            }, {
+                stateName: 'disabled',
+                icon: '<div class="h-full flex justify-center items-center"><svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z"/></svg></div>',
+                title: 'Location services disabled',
+                onClick: (btn) => {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        btn.state('locate')
+                        map.flyTo({ lat: position.coords.latitude, lng: position.coords.longitude }, map.getMaxZoom() > 17 ? 18 : 17, { animation: false });
+                    }, () => {
 
-        //     }).addTo(map);
-
-        //     // Find users location
-        //     navigator.geolocation.getCurrentPosition(() => {
-
-        //         // If user location found remove spinning icon
-        //         loadingLoc.remove(map)
-
-        //         // Add show-location button
-        //         L.easyButton('<div class="h-full flex justify-center items-center"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M429.6 92.1c4.9-11.9 2.1-25.6-7-34.7s-22.8-11.9-34.7-7l-352 144c-14.2 5.8-22.2 20.8-19.3 35.8s16.1 25.8 31.4 25.8H224V432c0 15.3 10.8 28.4 25.8 31.4s30-5.1 35.8-19.3l144-352z"/></svg></div>', () => {
-        //             navigator.geolocation.getCurrentPosition((position) => {
-        //                 map.flyTo({ lat: position.coords.latitude, lng: position.coords.longitude }, map.getMaxZoom() > 17 ? 18 : 17, { animation: false });
-        //             }, () => {
-        //                 console.log("Unable to retrieve your location")
-        //             }, {
-        //                 enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity
-        //             })
-        //         }, 'Show your location').addTo(map)
-
-        //     }, () => { // Error function to call if location services disabled
-        //         loadingLoc.remove(map)
-        //     }, {
-        //         enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity
-        //     })
-        // }
-
-
-        // // While app is searching for user location, show spinning icon using leaflet-easy-button
-        const loadingLoc = L.easyButton('<div class="flex justify-center items-center pt-[7px]"><span class="loading loading-spinner loading-xs"></span></div>', () => {
-
-        }).addTo(map);
-
-        // Find users location
-        navigator.geolocation.getCurrentPosition(() => {
-
-            // If user location found remove spinning icon
-            loadingLoc.remove(map)
-
-            // Add show-location button
-            L.easyButton('<div class="h-full flex justify-center items-center"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M429.6 92.1c4.9-11.9 2.1-25.6-7-34.7s-22.8-11.9-34.7-7l-352 144c-14.2 5.8-22.2 20.8-19.3 35.8s16.1 25.8 31.4 25.8H224V432c0 15.3 10.8 28.4 25.8 31.4s30-5.1 35.8-19.3l144-352z"/></svg></div>', () => {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    map.flyTo({ lat: position.coords.latitude, lng: position.coords.longitude }, map.getMaxZoom() > 17 ? 18 : 17, { animation: false });
-                }, () => {
-                    console.log("Unable to retrieve your location")
-                }, {
-                    enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity
-                })
-            }, 'Show your location').addTo(map)
-
-        }, () => { // Error function to call if location services disabled
-            loadingLoc.remove(map)
-        }, {
-            enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity
-        })
+                    }, {
+                        enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity
+                    })
+                }
+            }]
+        }).addTo(map)
     }, [map]);
 
     // Function to filter the markers
