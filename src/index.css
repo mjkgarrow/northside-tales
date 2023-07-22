@@ -18,3 +18,15 @@
 .leaflet-popup-tip {
     background-color: hsl(var(--b1));
 }
+
+
+*,
+html,
+body {
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+}
