@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ThemeChanger from './ThemeChanger'
 import { useGlobalState } from '../context/globalState'
 
 export default function NavBar() {
-    const { markerFilter, setMarkerFilter } = useGlobalState()
+    const { setMarkerFilter } = useGlobalState()
     const [open, setOpen] = useState(false)
-    const [markerButton, setMarketButton] = useState("Markers")
     const searchInput = useRef(null)
 
     // Update filter on change
@@ -47,9 +46,8 @@ export default function NavBar() {
                     break;
             }
 
-            // 
+            // Apply title to button content
             button.textContent = title
-            // setMarketButton(title)
 
             // Apply the new filter
             setMarkerFilter(event.target.value)
@@ -70,35 +68,29 @@ export default function NavBar() {
     // Handle opening/closing of dropdown from the button
     const handleClick = () => {
         if (open) {
-
-
             document.activeElement?.blur();
-
         }
-
         setOpen(!open)
     };
+
+    useEffect(() => {
+        const returnUser = localStorage.getItem("northsideTales")
+
+        if (!returnUser) {
+            window.my_modal_2.showModal()
+
+            localStorage.setItem("northsideTales", "true")
+        }
+    }, [])
 
     return (
         <header className="navbar bg-base-100 p-2 sm:p-5 flex-col sm:flex-row">
             <div className="flex-1 min-w-fit sm:pl-4">
                 <a className="normal-case text-2xl font-bold">Northside tales</a>
             </div>
-            <div className="flex-none gap-2 py-0">
-                {/* Search bar */}
-                <div className="form-control">
-                    <input
-                        autoFocus
-                        ref={searchInput}
-                        id='searchBar'
-                        onChange={changeFilter}
-                        type="text"
-                        placeholder="Search"
-                        className="input input-bordered input-sm sm:input-md w-28" />
-                </div>
-
+            <div className="flex-none gap-2 py-0 z-[9999]">
                 {/* Marker drop down */}
-                <div className="dropdown z-[9999]">
+                <div className="dropdown">
                     <label tabIndex={0} className="btn btn-sm sm:btn-md" id="markerButtonLabel" onClick={handleClick}>Markers</label>
                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                         <li><button onClick={changeFilter} value="">All markers</button></li>
@@ -135,7 +127,20 @@ export default function NavBar() {
                     </form>
                 </dialog>
 
+                {/* Search bar */}
+                <div className="form-control">
+                    <input
+                        autoFocus
+                        ref={searchInput}
+                        id='searchBar'
+                        onChange={changeFilter}
+                        type="text"
+                        placeholder="Search markers..."
+                        className="input input-bordered input-sm sm:input-md w-40" />
+                </div>
+
                 <ThemeChanger />
+
             </div>
         </header>
     )
