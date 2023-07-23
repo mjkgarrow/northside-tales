@@ -1,7 +1,7 @@
 import { MapContainer, Popup, Marker } from 'react-leaflet'
 import { useEffect, useState } from 'react'
 import { useGlobalState, useReactQueries } from '../context/globalState'
-import { DarkCleanMap, LightCleanMap, mapCanvasProps, customIcon, Watercolour } from './MapAssets'
+import { DarkCleanMap, LightCleanMap, mapCanvasProps, customIcon, Watercolour, brunswick, brunswickEast, brunswickWest, northcote, allSuburbs } from './MapAssets'
 import { convertToNaturalLanguage } from '../utils/helpers'
 
 import 'leaflet/dist/leaflet.css'
@@ -49,10 +49,19 @@ export default function MapCanvas() {
 
     }, [])
 
-    // Track changes to the map, like map start and map update
+    // When map is loaded, control buttons and handlers
     useEffect(() => {
         // Confirm the map is loaded
         if (!map) return;
+
+        // Make map restricted to northside
+        map.setMaxBounds([[-37.743640493508195, 144.9174406760859], [-37.8066531168464, 145.0500904395951]])
+
+        // Add suburb outline layers to control button, use 2nd argument so they are checkboxes instead of radio buttons
+        L.control.layers(
+            {},
+            { "All": allSuburbs, "Brunny": brunswick, "Brunny West": brunswickWest, "Brunny East": brunswickEast, "Northcote": northcote })
+            .addTo(map)
 
         // Add click functionm to map, close open popups or open modal
         map.on("click", (event) => {
