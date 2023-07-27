@@ -1,7 +1,7 @@
-import { MapContainer, Popup, Marker } from 'react-leaflet'
+import { MapContainer, Popup, Marker, useMapEvents } from 'react-leaflet'
 import { useEffect, useState } from 'react'
 import { useGlobalState, useReactQueries } from '../context/globalState'
-import { DarkCleanMap, LightCleanMap, mapCanvasProps, customIcon, Watercolour, brunswick, brunswickEast, brunswickWest, northcote, allSuburbs } from './MapAssets'
+import { DarkCleanMap, LightCleanMap, mapCanvasProps, customIcon, Watercolour, brunswick, brunswickEast, brunswickWest, northcote, thurnbury, coburg, allSuburbs } from './MapAssets'
 import { convertToNaturalLanguage } from '../utils/helpers'
 
 import 'leaflet/dist/leaflet.css'
@@ -55,39 +55,13 @@ export default function MapCanvas() {
         if (!map) return;
 
         // Make map restricted to northside
-        map.setMaxBounds([[-37.743640493508195, 144.9174406760859], [-37.8066531168464, 145.0500904395951]])
+        map.setMaxBounds([[-37.743640493508195, 144.9174406760859], [-37.7966531168464, 145.0500904395951]])
 
         // Add suburb outline layers to control button, use 2nd argument so they are checkboxes instead of radio buttons
         L.control.layers(
             {},
-            { "All": allSuburbs, "Brunny": brunswick, "Brunny West": brunswickWest, "Brunny East": brunswickEast, "Northcote": northcote })
+            { "All": allSuburbs, "Brunny": brunswick, "Brunny West": brunswickWest, "Brunny East": brunswickEast, "Northcote": northcote, "Thornbury": thurnbury, "Coburg": coburg })
             .addTo(map)
-
-        // Add click functionm to map, close open popups or open modal
-        map.on("click", (event) => {
-
-            // Set latLng data to global context
-            setLatLng(event.latlng)
-
-            // Manage popup closing on map click
-            if (popupOpen) {
-                setPopupOpen(false)
-
-                // Open form on clean map click
-            } else {
-                // Create a temporary marker
-                setTempMarker(event.latlng)
-
-                // Fly map to clicked location
-                map.flyTo({
-                    lat: event.latlng.lat - (map.getMaxZoom() > 17 ? 0.001 : 0.002),
-                    lng: event.latlng.lng
-                }, map.getMaxZoom() > 17 ? 18 : 17)
-
-                // Open form modal
-                window.marker_form_modal.showModal()
-            }
-        })
 
         // Button to reveal watercolour map
         L.easyButton({
@@ -114,6 +88,7 @@ export default function MapCanvas() {
             }]
         }).addTo(map);
 
+        // Button to locate user
         L.easyButton({
             states: [{
                 stateName: 'locate',
@@ -144,7 +119,9 @@ export default function MapCanvas() {
                 }
             }]
         }).addTo(map)
+
     }, [map]);
+
 
     // Function to filter the markers
     const filteredMarkers = () => {
@@ -188,8 +165,37 @@ export default function MapCanvas() {
         return str
     }
 
+    function MapEventHandler() {
+        const map = useMapEvents({
+            // On click, open modal
+            click: (event) => {
+                // Set latLng data to global context
+                setLatLng(event.latlng)
+
+                // Manage popup closing on map click
+                if (popupOpen) {
+                    setPopupOpen(false)
+
+                    // Open form on clean map click
+                } else {
+                    // Create a temporary marker
+                    setTempMarker(event.latlng)
+
+                    // Fly map to clicked location
+                    map.flyTo({
+                        lat: event.latlng.lat - (map.getMaxZoom() > 17 ? 0.0012 : 0.002),
+                        lng: event.latlng.lng
+                    }, map.getMaxZoom() > 17 ? 18 : 17)
+
+                    // Open form modal
+                    window.marker_form_modal.showModal()
+                }
+            }
+        })
+    }
+
     return (
-        <div className='w-full h-full flex justify-center items-center'>
+        <div className='w-full h-full flex justify-center items-center pb-5'>
             <MapContainer
                 center={userLoc || mapCanvasProps.center}
                 zoom={mapCanvasProps.zoom}
@@ -199,6 +205,9 @@ export default function MapCanvas() {
                 {/* Change map based on theme */}
                 {water ? Watercolour : theme === 'dark' ? DarkCleanMap : LightCleanMap}
                 {/* {theme === 'dark' ? DarkCleanMap : LightCleanMap} */}
+
+                {/* Handle events on the map */}
+                <MapEventHandler />
 
                 {/* Show temp marker when user clicks on map */}
                 {tempMarker && <Marker position={tempMarker} icon={customIcon("")} />}
