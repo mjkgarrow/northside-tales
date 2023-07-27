@@ -38,7 +38,7 @@ export default function MapForm({ latLng }) {
             reset()
 
             // Resent form height
-            document.getElementById("formTextArea").style.height = "102px"
+            document.getElementById("formTextArea").style.height = "80px"
         }, 200)
     }
 
@@ -53,7 +53,7 @@ export default function MapForm({ latLng }) {
             reset()
 
             // Resent form height
-            document.getElementById("formTextArea").style.height = "102px"
+            document.getElementById("formTextArea").style.height = "80px"
         }, 200)
     }
 
