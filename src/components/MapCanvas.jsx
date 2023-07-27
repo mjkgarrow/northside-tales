@@ -183,7 +183,7 @@ export default function MapCanvas() {
 
                     // Fly map to clicked location
                     map.flyTo({
-                        lat: event.latlng.lat - (map.getMaxZoom() > 17 ? 0.0012 : 0.002),
+                        lat: event.latlng.lat - (map.getMaxZoom() > 17 ? 0.0011 : 0.002),
                         lng: event.latlng.lng
                     }, map.getMaxZoom() > 17 ? 18 : 17)
 
