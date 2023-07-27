@@ -16,6 +16,14 @@ export default function HomePage() {
     // Show loading animation while data loads
     if (markerQuery.isLoading) return <LoadingIcon />
 
+    if (markerQuery.error) return (
+        <div className='w-full h-screen flex justify-center items-center text-center'>
+            Hmmm... there seems to be an error, sorry! 😢
+            <br />
+            Check back later. ❤️
+        </div>
+    )
+
     return (
         <div className='w-screen h-screen flex flex-col'>
             <NavBar />
@@ -23,7 +31,7 @@ export default function HomePage() {
                 <MapForm latLng={latLng} />
                 <MapCanvas />
             </main>
-            <Footer />
+            {/* <Footer /> */}
         </div>
     )
 }
