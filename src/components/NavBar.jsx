@@ -79,7 +79,7 @@ export default function NavBar() {
         const returnUser = localStorage.getItem("northsideTales")
 
         if (!returnUser) {
-            window.my_modal_2.showModal()
+            window.info_modal.showModal()
 
             localStorage.setItem("northsideTales", "true")
         }
